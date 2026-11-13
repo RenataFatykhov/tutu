@@ -1,18 +1,19 @@
 package pages;
 
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.attributeMatching;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
+import java.time.Duration;
+import java.util.regex.Pattern;
+
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.codeborne.selenide.WebDriverConditions.url;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static testdata.TestData.*;
 
 public class TutuMainPage {
@@ -24,7 +25,7 @@ public class TutuMainPage {
 
     @Step("Открыть страницу")
     public TutuMainPage openPage() {
-        open("");
+        open("/");
         return this;
     }
 
@@ -46,11 +47,6 @@ public class TutuMainPage {
         return this;
     }
 
-    @Step("Подготовить страницу")
-    public TutuMainPage preparePage() {
-        return this;
-    }
-
     @Step("Проверка видимости шапки сайта")
     public TutuMainPage checkHeaderVisible() {
         headers.findBy(visible).shouldBe(visible);
@@ -59,14 +55,15 @@ public class TutuMainPage {
 
     @Step("Проверка заголовка страницы")
     public TutuMainPage checkTitle(String expectedText) {
-        assertTrue(title().contains(expectedText));
+        new WebDriverWait(getWebDriver(), Duration.ofMillis(Configuration.timeout))
+                .until(ExpectedConditions.titleContains(expectedText));
         return this;
     }
 
     @Step("Проверка meta description")
     public TutuMainPage checkMetaDescription(String expectedText) {
         $("meta[name='description']")
-                .shouldHave(attributeMatching("content", "(?s).*" + expectedText + ".*"));
+                .shouldHave(attributeMatching("content", "(?s).*" + Pattern.quote(expectedText) + ".*"));
         return this;
     }
 
@@ -98,10 +95,7 @@ public class TutuMainPage {
     @Step("Проверка текущего URL")
     public TutuMainPage checkPageOpen(String expectedPath) {
         String expectedUrl = Configuration.baseUrl.replaceAll("/+$", "") + expectedPath;
-        String currentUrl = WebDriverRunner.getWebDriver()
-                .getCurrentUrl()
-                .replaceFirst("^(https?://[^/]+)//+", "$1/");
-        assertEquals(expectedUrl, currentUrl);
+        webdriver().shouldHave(url(expectedUrl));
         return this;
     }
 

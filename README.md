@@ -23,7 +23,7 @@ flowchart LR
 ## Технологии
 
 <p align="left">
-  <a href="https://www.oracle.com/java/"><img src="https://img.shields.io/badge/Java_21-ED8B00?style=for-the-badge&amp;logo=openjdk&amp;logoColor=white" alt="Java 21"></a>
+  <a href="https://www.oracle.com/java/"><img src="https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&amp;logo=openjdk&amp;logoColor=white" alt="Java 17"></a>
   <a href="https://gradle.org/"><img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&amp;logo=gradle&amp;logoColor=white" alt="Gradle"></a>
   <a href="https://junit.org/junit5/"><img src="https://img.shields.io/badge/JUnit_5-25A162?style=for-the-badge&amp;logo=junit5&amp;logoColor=white" alt="JUnit 5"></a>
   <a href="https://selenide.org/"><img src="https://img.shields.io/badge/Selenide-43B02A?style=for-the-badge&amp;logo=selenium&amp;logoColor=white" alt="Selenide"></a>
@@ -52,20 +52,48 @@ flowchart LR
 
 - Для каждого действия в Allure добавлены понятные шаги через `@Step` и `AllureSelenide`.
 - Для элементов с несколькими вариантами разметки выбирается видимый экземпляр через `$$().findBy(visible)`.
-- URL нормализуются перед сравнением, поэтому двойной слэш после домена не влияет на результат проверки.
-- После каждого теста к Allure-отчёту прикладываются скриншот, исходный код страницы, логи браузера и видео запуска.
+- Проверки URL и заголовка ожидают нужное состояние страницы; локаторы находятся в Page Object.
+- К Allure прикладываются скриншот, HTML и доступные логи браузера. Видео добавляется при удалённом запуске; браузер закрывается даже при ошибке сбора вложений.
 
 ## Запуск
+
+Требуются JDK 17+ и Chrome. Gradle Wrapper включён в репозиторий.
 
 Локальный запуск:
 
 ```bash
 ./gradlew clean test
+./gradlew test -Dheadless=true
 ```
 
 В Jenkins тесты запускаются в удалённом Chrome через Selenoid. После выполнения Jenkins публикует Allure Report.
 
-## Результаты тестирования
+Параметры запуска:
+
+| Параметр | По умолчанию | Назначение |
+| --- | --- | --- |
+| `browser` | `chrome` | Браузер |
+| `browserVersion` | Пусто | Установленный локально браузер или версия на удалённом сервере |
+| `browserSize` | `1920x1080` | Размер окна |
+| `baseUrl` | `https://www.tutu.ru/` | Сайт |
+| `remote` | Не задан | URL Selenoid |
+| `headless` | `false` | Запуск без окна |
+| `videoUrl` | `https://selenoid.qa.guru/video/` | Базовый URL видеозаписей |
+
+```bash
+./gradlew test -Dremote=http://localhost:4444/wd/hub -DbrowserVersion=128.0
+./gradlew allureReport
+```
+
+Версию браузера нужно выбирать из доступных на вашем сервере Selenoid.
+Отчёты JUnit: `build/reports/tests/test/index.html`, Allure results: `build/allure-results`.
+
+## Ручное тестирование
+
+[Тест-кейсы Tutu.ru](docs/manual-test-cases.md) дополняют автоматический smoke-набор
+проверками формы поиска, авторизации и навигации. Покупка и оплата билетов не выполняются.
+
+## Результаты предыдущего прогона
 
 В [прогоне Jenkins №22](https://jenkins.qa.guru/job/tutu/22/allure/#suites/9d9746198fda9b3d1f038c735e93d3e4) успешно выполнены все 10 автотестов.
 
@@ -122,3 +150,5 @@ Auto QA
 
 - Email: [renata.musenova@gmail.com](mailto:renata.musenova@gmail.com)
 - Телефон: [+7 917 240-33-84](tel:+79172403384)
+
+- Telegram: [@renata_fatykhov](https://t.me/renata_fatykhov)

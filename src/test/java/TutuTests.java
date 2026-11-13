@@ -13,7 +13,6 @@ public class TutuTests extends TestBase {
     public void openHomePageTest() {
         mainPage
                 .openPage()
-                .preparePage()
                 .checkPageOpen("/");
     }
 
@@ -22,7 +21,6 @@ public class TutuTests extends TestBase {
     public void headerVisibleTest() {
         mainPage
                 .openPage()
-                .preparePage()
                 .checkHeaderVisible();
 
     }
@@ -32,7 +30,6 @@ public class TutuTests extends TestBase {
     public void metaDescriptionTest() {
         mainPage
                 .openPage()
-                .preparePage()
                 .checkMetaDescription(META_DESCRIPTION);
 
     }
@@ -43,7 +40,6 @@ public class TutuTests extends TestBase {
 
         mainPage
                 .openPage()
-                .preparePage()
                 .checkHeaderLogo();
 
     }
@@ -53,7 +49,6 @@ public class TutuTests extends TestBase {
     public void searchFormVisibleTest() {
         mainPage
                 .openPage()
-                .preparePage()
                 .checkSearchFormVisible();
 
     }
@@ -63,7 +58,6 @@ public class TutuTests extends TestBase {
     public void loginButtonVisibleTest() {
         mainPage
                 .openPage()
-                .preparePage()
                 .checkLoginButton();
 
     }
@@ -73,7 +67,6 @@ public class TutuTests extends TestBase {
     public void footerVisibleTest() {
         mainPage
                 .openPage()
-                .preparePage()
                 .checkFooterVisible();
 
     }
@@ -83,7 +76,6 @@ public class TutuTests extends TestBase {
     public void openHelpPageTest() {
         mainPage
                 .openHelpPage()
-                .preparePage()
                 .checkPageOpen(HELP_PAGE_URL)
                 .checkTitle(HELP_PAGE_TITLE);
 
@@ -94,7 +86,6 @@ public class TutuTests extends TestBase {
     public void openGuidePageTest() {
         mainPage
                 .openGuidePage()
-                .preparePage()
                 .checkPageOpen(GUIDE_PAGE_URL)
                 .checkTitle(GUIDE_PAGE_TITLE);
 
@@ -105,7 +96,6 @@ public class TutuTests extends TestBase {
     public void openTrainsPageTest() {
         mainPage
                 .openTrainsPage()
-                .preparePage()
                 .checkPageOpen(TRAINS_PAGE_URL)
                 .checkTitle(TRAINS_PAGE_TITLE);
 
