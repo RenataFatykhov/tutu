@@ -1,103 +1,66 @@
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pages.TutuMainPage;
+import pages.MainPage;
 
 import static testdata.TestData.*;
 
 public class TutuTests extends TestBase {
-
-    TutuMainPage mainPage = new TutuMainPage();
+    private final MainPage mainPage = new MainPage();
 
     @Test
-    @DisplayName("Открывается главная страница")
-    public void openHomePageTest() {
-        mainPage
-                .openPage()
-                .checkPageOpen("/");
+    @DisplayName("Главная страница: основные элементы доступны пользователю")
+    void homePageSmokeTest() {
+        mainPage.openPage().checkPageOpen("/")
+                .checkHeaderVisible().checkHeaderLogo("https://www.tutu.ru/")
+                .checkSearchFormVisible().checkLoginButton(LOGIN_BUTTON_TEXT)
+                .checkMetaDescription(META_DESCRIPTION).checkFooterVisible();
     }
 
     @Test
-    @DisplayName("На главной странице видна шапка сайта")
-    public void headerVisibleTest() {
-        mainPage
-                .openPage()
-                .checkHeaderVisible();
-
+    @DisplayName("Пассажир выбирает города и меняет направление поездки")
+    void swapRouteTest() {
+        mainPage.openPage().selectTrains()
+                .setRoute("Москва", "Санкт-Петербург")
+                .swapCities().checkRoute("Санкт-Петербург", "Москва");
     }
 
     @Test
-    @DisplayName("На главной странице есть meta description")
-    public void metaDescriptionTest() {
-        mainPage
-                .openPage()
-                .checkMetaDescription(META_DESCRIPTION);
-
+    @DisplayName("Двойной обмен городов восстанавливает исходный маршрут")
+    void swapRouteTwiceTest() {
+        mainPage.openPage().selectTrains()
+                .setRoute("Москва", "Санкт-Петербург")
+                .swapCities().swapCities().checkRoute("Москва", "Санкт-Петербург");
     }
 
     @Test
-    @DisplayName("На главной странице виден логотип")
-    public void headerLogoTest() {
-
-        mainPage
-                .openPage()
-                .checkHeaderLogo();
-
+    @DisplayName("Пассажир добавляет и удаляет попутчика")
+    void passengersTest() {
+        mainPage.openPage().selectTrains()
+                .addAdult().checkPassengers("2 пассажира")
+                .removeAdult().checkPassengers("1 пассажир");
     }
 
     @Test
-    @DisplayName("На главной странице видна форма поиска")
-    public void searchFormVisibleTest() {
-        mainPage
-                .openPage()
-                .checkSearchFormVisible();
-
+    @DisplayName("Выбор маршрута и поиск открывают расписание поездов")
+    void trainSearchTest() {
+        mainPage.openPage().selectTrains()
+                .setRoute("Москва", "Санкт-Петербург").search()
+                .checkRoute("/poezda/Moskva/Sankt-Peterburg/", "Москва", "Санкт-Петербург");
     }
 
     @Test
-    @DisplayName("На главной странице есть кнопка Войти")
-    public void loginButtonVisibleTest() {
-        mainPage
-                .openPage()
-                .checkLoginButton();
-
+    @DisplayName("Пользователь находит инструкцию возврата через справочную")
+    void returnTicketHelpTest() {
+        mainPage.openPage().goToHelp(HELP_PAGE_URL).checkTitle(HELP_PAGE_TITLE)
+                .selectCategory("Поезда").openArticle("Как вернуть билет на поезд")
+                .checkArticle("Как вернуть билет на поезд");
     }
 
     @Test
-    @DisplayName("На главной странице виден футер")
-    public void footerVisibleTest() {
-        mainPage
-                .openPage()
-                .checkFooterVisible();
-
-    }
-
-    @Test
-    @DisplayName("Открывается страница справочной")
-    public void openHelpPageTest() {
-        mainPage
-                .openHelpPage()
-                .checkPageOpen(HELP_PAGE_URL)
-                .checkTitle(HELP_PAGE_TITLE);
-
-    }
-
-    @Test
-    @DisplayName("Открывается страница путеводителя")
-    public void openGuidePageTest() {
-        mainPage
-                .openGuidePage()
-                .checkPageOpen(GUIDE_PAGE_URL)
-                .checkTitle(GUIDE_PAGE_TITLE);
-
-    }
-
-    @Test
-    @DisplayName("Открывается страница ЖД билетов")
-    public void openTrainsPageTest() {
-        mainPage
-                .openTrainsPage()
-                .checkPageOpen(TRAINS_PAGE_URL)
-                .checkTitle(TRAINS_PAGE_TITLE);
-
+    @DisplayName("Пользователь раскрывает полный список регионов путеводителя")
+    void guideRegionsTest() {
+        mainPage.openPage().goToGuide(GUIDE_PAGE_URL)
+                .checkTitle(GUIDE_PAGE_TITLE)
+                .expandRegions("Все регионы России").checkRegion("Татарстан");
     }
 }

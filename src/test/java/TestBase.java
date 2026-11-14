@@ -21,6 +21,8 @@ public class TestBase {
         Configuration.browserSize = System.getProperty("browserSize", "1920x1080");
         Configuration.baseUrl = System.getProperty("baseUrl", "https://www.tutu.ru").replaceAll("/+$", "");
         Configuration.pageLoadStrategy = "eager";
+        Configuration.timeout = Long.getLong("selenide.timeout", 15000L);
+        Configuration.pageLoadTimeout = Long.getLong("selenide.pageLoadTimeout", 60000L);
         Configuration.remote = System.getProperty("remote");
         Configuration.headless = Boolean.parseBoolean(System.getProperty("headless", "false"));
 
