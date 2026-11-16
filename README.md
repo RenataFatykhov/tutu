@@ -18,7 +18,7 @@ flowchart LR
     F --> G[Jira MUL-45<br/>Связанные тесты и запуски]
 ```
 
-Тесты организованы по паттерну Page Object: сценарии находятся в `TutuTests`, а действия и проверки страницы - в `pages/MainPage`, `HelpPage`, `HelpArticlePage`, `GuidePage`, `TrainsPage` и компоненте `components/TrainSearchForm`.
+Тесты организованы по паттерну Page Object: сценарии находятся в `TutuTests`, а действия и проверки страницы - в `pages/MainPage`, `HelpPage`, `HelpArticlePage`, `GuidePage`, `TrainsPage` и компоненте `pages.components.TrainSearchForm`.
 
 ## Технологии
 

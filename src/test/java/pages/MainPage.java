@@ -4,13 +4,13 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
+import pages.components.TrainSearchForm;
 
 import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverConditions.url;
-import components.TrainSearchForm;
 
 public class MainPage {
     private final ElementsCollection headers = $$("[data-ti='header']");
@@ -23,8 +23,8 @@ public class MainPage {
     private final SelenideElement footer = $("[data-ti='footer']");
 
     @Step("Открыть страницу")
-    public MainPage openPage() {
-        open("/");
+    public MainPage openPage(String path) {
+        open(path);
         return this;
     }
 
